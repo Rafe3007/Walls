@@ -1,0 +1,28 @@
+#   Created by Thebatz ^.^
+
+# # # # # # # # # # # # # # # # # # # #
+# Player Parameters to start the game #
+# # # # # # # # # # # # # # # # # # # #
+min-Players: 1
+max-Players: 24
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # #  
+# Countdowns (in sec) and phase-Timers (in minutes) #
+# # # # # # # # # # # # # # # # # # # # # # # # # # #
+lobby-countdown: 30
+Prep-phase: 10
+Battle-phase: 15
+
+# # # # # # # # # # #
+# Maps/Lobby Stuff  #
+# # # # # # # # # # #
+Lobby-spawn:                # use '/walls setlobbyspawn' to set spawn
+  world: 'world'
+
+Maps:                       # Reload the plugin if these don't list properly first time running
+  '0':
+    world: 'world'
+    name: 'Map1'
+  '1':
+    world: 'world'
+    name: 'Map2'

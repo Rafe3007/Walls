@@ -1,0 +1,6 @@
+walls.setlobbyspawn
+walls.setarenaspawn
+walls.player 
+  - include /walls list,join,leave,lobby
+walls.admin
+  - includes /walls setspawn,info,setlobby,stsb,stsa,reload

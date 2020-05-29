@@ -1,0 +1,12 @@
+main: com.Thebatz.Walls.Main
+api-version: 1.13
+version: 1.0
+name: Walls
+author: Thebatz
+description: Walls mini-game
+commands:
+  test:
+    aliases: [t]
+    description: Check if Config works
+  walls:
+    description: Type '/walls help' for more info
