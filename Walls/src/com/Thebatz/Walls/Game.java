@@ -19,12 +19,19 @@ public class Game {
 	
 	public void start() {
 		map.setState(GameState.LIVE);
-		map.sendMessage(ChatColor.AQUA + "The Walls have fallen..." + ChatColor.GRAY + " Last team standing wins");
+		map.sendMessage(ChatColor.GRAY + "You have 10 mintues to prepare to fight");
 		
 		for(UUID uuid : map.getPlayers()) {
 			kills.put(uuid, 0);
 			Bukkit.getPlayer(uuid).closeInventory();
 		}
+	}
+	
+	public void battle() {
+		map.sendMessage(ChatColor.GRAY + "The Walls have fallen... Last team standing wins");
+		
+		// TODO wall fall 
+		
 	}
 	
 	// TODO add Team Amounts to end game

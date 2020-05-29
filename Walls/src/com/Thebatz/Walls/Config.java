@@ -1,5 +1,7 @@
 package com.Thebatz.Walls;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -24,6 +26,7 @@ public class Config {
 	public static World getLobbyWorld() { return Bukkit.getWorld(main.getConfig().getString("lobby-spawn.world")); }
 	public static World getMapWorld(int id) { return Bukkit.getWorld(main.getConfig().getString("Maps." + id + ".world")); }
 	public static String getMapName(int id) { return main.getConfig().getString("Maps." + id + ".name"); }  
+	public static List<String> getWallMaterials (int id) { return main.getConfig().getStringList("Maps." + id + ".wall"); }
 	
 	public static int getMapAmount() { return main.getConfig().getConfigurationSection("Maps.").getKeys(false).size(); }
 }

@@ -23,6 +23,12 @@ Maps:                       # Reload the plugin if these don't list properly fir
   '0':
     world: 'world'
     name: 'Map1'
+    wall:
+      - 'DIRT'
+      - 'COBBLESTONE'           
   '1':
     world: 'world'
     name: 'Map2'
+    wall:
+      - 'END_STONE'
+      - 'GRAY_CONCRETE'

@@ -13,6 +13,10 @@ import com.Thebatz.Walls.Main;
 import com.Thebatz.Walls.Manager;
 import com.Thebatz.Walls.Maps;
 import com.Thebatz.Walls.initiateFiles;
+//import com.sk89q.worldedit.IncompleteRegionException;
+//import com.sk89q.worldedit.regions.CuboidRegion;
+//import com.sk89q.worldedit.regions.Region;
+//import com.sk89q.worldedit.world.World;
 
 public class WallsCommand implements CommandExecutor{
 	
@@ -25,19 +29,19 @@ public class WallsCommand implements CommandExecutor{
 			if(args.length == 1 && args[0].equalsIgnoreCase("help")) {
 				player.sendMessage(ChatColor.AQUA + "------------------");
 				if(player.hasPermission("walls.admin")) {
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls setspawn" + ChatColor.DARK_GRAY + " Sets the Lobby spawn");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls setlobby [id]" + ChatColor.DARK_GRAY + " Set a map's waiting lobby");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls setSpawnA [id]" + ChatColor.DARK_GRAY + " Set spawn location of team A 'set team spawn a");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls setSpawnB [id]" + ChatColor.DARK_GRAY + " Set spawn location of team B 'set team spawn b");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls info [id]" + ChatColor.DARK_GRAY + " Information about a walls map");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls reload" + ChatColor.DARK_GRAY + " Reload config file");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls setspawn" + ChatColor.AQUA + " Sets the Lobby spawn");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls setlobby [id]" + ChatColor.AQUA + " Set a map's waiting lobby");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls setSpawnA [id]" + ChatColor.AQUA + " Set spawn location of team A 'set team spawn a");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls setSpawnB [id]" + ChatColor.AQUA + " Set spawn location of team B 'set team spawn b");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls info [id]" + ChatColor.AQUA + " Information about a walls map");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls reload" + ChatColor.AQUA + " Reload config file");
 				} 
 				
 				if(player.hasPermission("walls.player")) {
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls lobby" + ChatColor.DARK_GRAY + " Teleport to lobby spawn");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls list" + ChatColor.DARK_GRAY + " List available maps");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls join [id]" + ChatColor.DARK_GRAY + " Join a walls game");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls leave" + ChatColor.DARK_GRAY + " Leave a walls game");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls lobby" + ChatColor.AQUA + " Teleport to lobby spawn");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls list" + ChatColor.AQUA + " List available maps");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls join [id]" + ChatColor.AQUA + " Join a walls game");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls leave" + ChatColor.AQUA + " Leave a walls game");
 				}
 			}
 			
@@ -82,6 +86,25 @@ public class WallsCommand implements CommandExecutor{
 				}
 			}
 			
+//			else if(args.length == 2 && args[0].equalsIgnoreCase("setwall")) {
+//				if(player.hasPermission("walls.admin")) {
+//					Region selec = null;
+//					try {
+//						selec = Main.getInstance().getAPI().getSession(player).getSelection((World) player.getWorld());
+//					} catch (IncompleteRegionException e) {
+//						e.printStackTrace();
+//					}
+//					if(selec == null) {
+//						player.sendMessage(ChatColor.RED + "You don't have anything selected!");
+//					} else {
+//						CuboidRegion cS = new CuboidRegion((World) player.getWorld(), selec.getMinimumPoint(), selec.getMaximumPoint());
+//						player.sendMessage(ChatColor.GREEN + "Wall region has been set!");
+//					}
+//				} else {
+//					player.sendMessage(ChatColor.RED + "You don't have permission to use this");
+//				}
+//			}
+			
 			else if(args.length == 2 && args[0].equalsIgnoreCase("setspawnb")) {
 				if(player.hasPermission("walls.admin")) {
 					try {
@@ -89,7 +112,7 @@ public class WallsCommand implements CommandExecutor{
 						if (id >= 0 && id <= (Config.getMapAmount() - 1)) {
 							Manager.getMap(id).setTeamspawn1(player.getLocation());
 							initiateFiles.writeTSA(player, id);
-							player.sendMessage(ChatColor.GREEN + "Map Spawn A Successfully set");
+							player.sendMessage(ChatColor.GREEN + "Map Spawn B Successfully set");
 						} else {
 							player.sendMessage(ChatColor.RED + "Invalid usage. - /walls stsa [id]");
 						}
@@ -108,7 +131,7 @@ public class WallsCommand implements CommandExecutor{
 						if (id >= 0 && id <= (Config.getMapAmount() - 1)) {
 							Manager.getMap(id).setTeamspawn2(player.getLocation());
 							initiateFiles.writeTSB(player, id);
-							player.sendMessage(ChatColor.GREEN + "Map Spawn B Successfully set");
+							player.sendMessage(ChatColor.GREEN + "Map Spawn A Successfully set");
 						} else {
 							player.sendMessage(ChatColor.RED + "Invalid usage. - /walls stsb [id]");
 						}
@@ -143,7 +166,7 @@ public class WallsCommand implements CommandExecutor{
 									ChatColor.DARK_AQUA + "  x=" + ChatColor.WHITE + Manager.getMap(id).getTeamspawn2().getBlockX() + 
 									ChatColor.DARK_AQUA + "  y=" + ChatColor.WHITE + Manager.getMap(id).getTeamspawn2().getBlockY() + 
 									ChatColor.DARK_AQUA + "  z=" + ChatColor.WHITE + Manager.getMap(id).getTeamspawn2().getBlockZ());
-							
+							player.sendMessage("");
 						} else {
 							player.sendMessage(ChatColor.RED + "Invalid map ID - /walls info [id]");
 						}

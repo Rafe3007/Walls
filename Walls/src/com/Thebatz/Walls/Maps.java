@@ -15,13 +15,14 @@ public class Maps {
 	private int id;
 	private String name;
 	private ArrayList<UUID> players;
+	private List<String> wall;
 //	private HashMap<UUID, Team> teams;
 	private Location waitLobby,teamSpawn1,teamSpawn2;
 	private GameState state;
 	private Countdown countdown;
 	private Game game;
 	
-	private Location temp = new Location(Bukkit.getWorld("world"),400,70,400);
+	private Location temp = new Location(Bukkit.getWorld("world"),400,100,400);
 	
 	public Maps(int id) {
 		this.id = id;
@@ -30,43 +31,45 @@ public class Maps {
 //		teams = new HashMap<>();
 		
 		if(initiateFiles.getMapYaml().contains("Maps." + id)) {
-			float pitch = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + "lobby.pitch");
-			float yaw = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + "lobby.yaw");
+			float pitch = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.pitch");
+			float yaw = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.yaw");
 			waitLobby = new Location(
-				Bukkit.getWorld(initiateFiles.getMapYaml().getString("lobby.world")),
-				initiateFiles.getMapYaml().getDouble("lobby.x"),
-				initiateFiles.getMapYaml().getDouble("lobby.y"),
-				initiateFiles.getMapYaml().getDouble("lobby.z")
+				Bukkit.getWorld(initiateFiles.getMapYaml().getString("Maps." + id + ".lobby.world")),
+				initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.x"),
+				initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.y"),
+				initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.z")
 			);
 			waitLobby.setPitch(pitch);
 			waitLobby.setYaw(yaw);
 			
-			float pit1 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + "tsa.pitch");
-			float yaw1 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + "tsa.yaw");
+			float pit1 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-A.pitch");
+			float yaw1 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-A.yaw");
 			teamSpawn1 = new Location(
-				Bukkit.getWorld(initiateFiles.getMapYaml().getString("tsa.world")),
-				initiateFiles.getMapYaml().getDouble("tsa.x"),
-				initiateFiles.getMapYaml().getDouble("tsa.y"),
-				initiateFiles.getMapYaml().getDouble("tsa.z")
+				Bukkit.getWorld(initiateFiles.getMapYaml().getString("Maps." + id + ".Team-Spawn-A.world")),
+				initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-A.x"),
+				initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-A.y"),
+				initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-A.z")
 			);
 			teamSpawn1.setPitch(pit1);
 			teamSpawn1.setYaw(yaw1);
 			
-			float pitch2 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + "tsb.pitch");
-			float yaw2 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + "tsb.yaw");
+			float pitch2 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-B.pitch");
+			float yaw2 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-B.yaw");
 			teamSpawn2 = new Location(
-				Bukkit.getWorld(initiateFiles.getMapYaml().getString("lobby.world")),
-				initiateFiles.getMapYaml().getDouble("tsb.x"),
-				initiateFiles.getMapYaml().getDouble("tsb.y"),
-				initiateFiles.getMapYaml().getDouble("tsb.z")
+				Bukkit.getWorld(initiateFiles.getMapYaml().getString("Maps." + id + ".Team-Spawn-B.world")),
+				initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-B.x"),
+				initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-B.y"),
+				initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-B.z")
 			);
-			waitLobby.setPitch(pitch2);
-			waitLobby.setYaw(yaw2);
+			teamSpawn2.setPitch(pitch2);
+			teamSpawn2.setYaw(yaw2);
 		} else {
 			waitLobby = temp;
 			teamSpawn1 = temp;
 			teamSpawn2 = temp;
 		}
+		
+		wall = Config.getWallMaterials(id);
 			
 		state = GameState.RECRUITING;
 		countdown= new Countdown(this);
@@ -75,6 +78,10 @@ public class Maps {
 	
 	public void start() {
 		game.start();
+	}
+	
+	public void battle() {
+		game.battle();
 	}
 	
 	public void reset() {
@@ -126,11 +133,11 @@ public class Maps {
 	public Location getTeamspawn1() { return teamSpawn1; }
 	public Location getTeamspawn2() { return teamSpawn2; }
 	public Location getMapLobby() { return waitLobby; }
+	public List<String> getWall() { return wall; }
 	
 	public void setState(GameState state) { this.state = state; }
 	public void setTeamspawn1(Location loc) { this.teamSpawn1 = loc; }
 	public void setTeamspawn2(Location loc) { this.teamSpawn2 = loc; }
 	public void setLobby(Location loc) { this.waitLobby = loc; }
-	
 	
 }
