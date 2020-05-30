@@ -13,10 +13,10 @@ import com.Thebatz.Walls.Main;
 import com.Thebatz.Walls.Manager;
 import com.Thebatz.Walls.Maps;
 import com.Thebatz.Walls.initiateFiles;
-//import com.sk89q.worldedit.IncompleteRegionException;
-//import com.sk89q.worldedit.regions.CuboidRegion;
-//import com.sk89q.worldedit.regions.Region;
-//import com.sk89q.worldedit.world.World;
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.bukkit.BukkitPlayer;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
 
 public class WallsCommand implements CommandExecutor{
 	
@@ -86,24 +86,31 @@ public class WallsCommand implements CommandExecutor{
 				}
 			}
 			
-//			else if(args.length == 2 && args[0].equalsIgnoreCase("setwall")) {
-//				if(player.hasPermission("walls.admin")) {
-//					Region selec = null;
-//					try {
-//						selec = Main.getInstance().getAPI().getSession(player).getSelection((World) player.getWorld());
-//					} catch (IncompleteRegionException e) {
-//						e.printStackTrace();
-//					}
-//					if(selec == null) {
-//						player.sendMessage(ChatColor.RED + "You don't have anything selected!");
-//					} else {
-//						CuboidRegion cS = new CuboidRegion((World) player.getWorld(), selec.getMinimumPoint(), selec.getMaximumPoint());
-//						player.sendMessage(ChatColor.GREEN + "Wall region has been set!");
-//					}
-//				} else {
-//					player.sendMessage(ChatColor.RED + "You don't have permission to use this");
-//				}
-//			}
+			else if(args.length == 2 && args[0].equalsIgnoreCase("setwall")) {
+				if(player.hasPermission("walls.admin")) {
+					try {
+						int id = Integer.parseInt(args[1]);
+						Region selec = null;
+						BukkitPlayer worldeditplayer = Main.getInstance().getAPI().wrapPlayer(player);
+						try {
+							selec = Main.getInstance().getAPI().getSession(player).getSelection(worldeditplayer.getWorld());
+						} catch (IncompleteRegionException e) {
+							e.printStackTrace();
+						}
+						if(selec == null) {
+							player.sendMessage(ChatColor.RED + "You don't have anything selected!");
+						} else {
+							CuboidRegion cS = new CuboidRegion(worldeditplayer.getWorld(), selec.getMinimumPoint(), selec.getMaximumPoint());
+							initiateFiles.writeWallData(cS, id);
+							player.sendMessage(ChatColor.GREEN + "Wall region has been set!");
+						}
+					} catch(NumberFormatException x) {
+						player.sendMessage(ChatColor.RED + "Invalid usage. - /walls setwall [id]");
+					}
+				} else {
+					player.sendMessage(ChatColor.RED + "You don't have permission to use this");
+				}
+			}
 			
 			else if(args.length == 2 && args[0].equalsIgnoreCase("setspawnb")) {
 				if(player.hasPermission("walls.admin")) {
@@ -182,6 +189,7 @@ public class WallsCommand implements CommandExecutor{
 				if(player.hasPermission("walls.admin")) {
 					Main.getInstance().getConfig().options().copyDefaults();
 					Main.getInstance().saveDefaultConfig();
+					player.sendMessage(ChatColor.GREEN + "Walls config reloaded!");
 				} else {
 					player.sendMessage(ChatColor.RED + "You don't have permission to use this");
 				}

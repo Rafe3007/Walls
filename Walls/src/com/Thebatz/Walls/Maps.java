@@ -6,23 +6,33 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import com.Thebatz.Walls.Countdowns.Countdown;
+import com.Thebatz.Walls.Countdowns.PrepPhase;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.world.World;
 
 public class Maps {
 	
 	private int id;
 	private String name;
 	private ArrayList<UUID> players;
-	private List<String> wall;
+	private List<Block> wallMaterials;
 //	private HashMap<UUID, Team> teams;
 	private Location waitLobby,teamSpawn1,teamSpawn2;
+	private CuboidRegion wall;
 	private GameState state;
 	private Countdown countdown;
+	private PrepPhase prepPhase;
 	private Game game;
 	
-	private Location temp = new Location(Bukkit.getWorld("world"),400,100,400);
+	private Location temp = new Location(Bukkit.getWorld("world"),0,0,0);
+	
+	// TODO Make checks to see if all config sections are set
 	
 	public Maps(int id) {
 		this.id = id;
@@ -63,21 +73,32 @@ public class Maps {
 			);
 			teamSpawn2.setPitch(pitch2);
 			teamSpawn2.setYaw(yaw2);
+			
+			BlockVector3 max = createBv3(initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.x"),
+					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.y"),
+					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.z"));
+			BlockVector3 min = createBv3(initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.x"),
+					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.y"),
+					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.z"));
+			World world = BukkitAdapter.adapt(Bukkit.getWorld(initiateFiles.getMapYaml().getString("Maps." + id + ".wall-region.world")));
+			wall = new CuboidRegion(world,max,min);
 		} else {
 			waitLobby = temp;
 			teamSpawn1 = temp;
 			teamSpawn2 = temp;
 		}
 		
-		wall = Config.getWallMaterials(id);
+		wallMaterials = new ArrayList<Block>();;
 			
 		state = GameState.RECRUITING;
 		countdown= new Countdown(this);
+		prepPhase = new PrepPhase(this);
 		game = new Game(this);
 	}
 	
 	public void start() {
 		game.start();
+		prepPhase.begin();
 	}
 	
 	public void battle() {
@@ -125,6 +146,11 @@ public class Maps {
 		}
 	}
 	
+	// returns new BlockVector3
+	public BlockVector3 createBv3(int x, int y, int z) {
+		return BlockVector3.at(x, y, z);
+	}
+	
 	public int getID() { return id; }
 	public List<UUID> getPlayers() { return players; }
 	public GameState getState() { return state; } 
@@ -133,7 +159,14 @@ public class Maps {
 	public Location getTeamspawn1() { return teamSpawn1; }
 	public Location getTeamspawn2() { return teamSpawn2; }
 	public Location getMapLobby() { return waitLobby; }
-	public List<String> getWall() { return wall; }
+	public CuboidRegion getWallRegion() { return wall; }
+	public List<Block> getWall() { 
+		for (BlockVector3 block : wall) {
+			Location temp = BukkitAdapter.adapt(BukkitAdapter.adapt(wall.getWorld()), block);
+			wallMaterials.add(temp.getBlock());
+		}
+		return wallMaterials; 
+	}
 	
 	public void setState(GameState state) { this.state = state; }
 	public void setTeamspawn1(Location loc) { this.teamSpawn1 = loc; }

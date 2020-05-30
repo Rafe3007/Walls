@@ -1,10 +1,13 @@
 package com.Thebatz.Walls;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class Game {
@@ -30,7 +33,17 @@ public class Game {
 	public void battle() {
 		map.sendMessage(ChatColor.GRAY + "The Walls have fallen... Last team standing wins");
 		
-		// TODO wall fall 
+		List<Block> wall = map.getWall();
+		// For loop iterating wallMat String
+		for (Block block : wall) {
+			if(block.getType().equals(Material.DIRT)) {
+				block.setType(Material.ACACIA_PLANKS);
+				map.sendMessage("Found Dirt!!");
+			} else {
+				map.sendMessage("Didn't find jazz :/ Size: " + wall.size());
+			}
+			
+		}
 		
 	}
 	
