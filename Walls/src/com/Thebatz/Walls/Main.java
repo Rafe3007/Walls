@@ -39,7 +39,7 @@ public class Main extends JavaPlugin{
 		getCommand("test").setExecutor(new TestCommand());
 		getCommand("walls").setExecutor(new WallsCommand());
 		
-		
+		Bukkit.getPluginManager().registerEvents(new GameListener(), this);
 	}
 	
 	public static Main getInstance() { return instance; }

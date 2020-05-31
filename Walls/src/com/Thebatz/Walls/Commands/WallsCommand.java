@@ -9,9 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.Thebatz.Walls.Config;
+import com.Thebatz.Walls.GameState;
 import com.Thebatz.Walls.Main;
 import com.Thebatz.Walls.Manager;
 import com.Thebatz.Walls.Maps;
+import com.Thebatz.Walls.TeamGUI;
 import com.Thebatz.Walls.initiateFiles;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
@@ -257,6 +259,18 @@ public class WallsCommand implements CommandExecutor{
 				}
 			}
 			
+			else if(args.length == 1 && args[0].equalsIgnoreCase("team")) {
+				if (Manager.isPlaying(player)) {
+					if (Manager.getMap(player).getState().equals(GameState.COUNTDOWN) || 
+							Manager.getMap(player).getState().equals(GameState.RECRUITING)) {
+						new TeamGUI(player);
+					} else {
+						player.sendMessage(ChatColor.RED + "You can't use this right now.");
+					}
+				} else {
+					player.sendMessage(ChatColor.RED + "You are not in a Wall Game!");
+				}
+			}
 			
 			
 			else {

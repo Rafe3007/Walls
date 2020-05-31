@@ -1,10 +1,12 @@
 package com.Thebatz.Walls;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -12,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import com.Thebatz.Walls.Countdowns.Countdown;
 import com.Thebatz.Walls.Countdowns.PrepPhase;
+import com.google.common.collect.TreeMultimap;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
@@ -23,7 +26,7 @@ public class Maps {
 	private String name;
 	private ArrayList<UUID> players;
 	private List<Block> wallMaterials;
-//	private HashMap<UUID, Team> teams;
+	private HashMap<UUID, Team> teams;
 	private Location waitLobby,teamSpawn1,teamSpawn2;
 	private CuboidRegion wall;
 	private GameState state;
@@ -39,7 +42,7 @@ public class Maps {
 		this.id = id;
 		this.name = Config.getMapName(id);
 		players = new ArrayList<>();
-//		teams = new HashMap<>();
+		teams = new HashMap<>();
 		
 		if(initiateFiles.getMapYaml().contains("Maps." + id)) {
 			float pitch = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.pitch");
@@ -113,6 +116,7 @@ public class Maps {
 		
 		state = GameState.RECRUITING;
 		players.clear();
+		teams.clear();
 		countdown = new Countdown(this);
 		prepPhase = new PrepPhase(this);
 		game = new Game(this);
@@ -128,6 +132,16 @@ public class Maps {
 		players.add(player.getUniqueId());
 		player.teleport(waitLobby);
 		
+		TreeMultimap<Integer, Team> count = TreeMultimap.create();
+		for (Team team : Team.values()) {
+			count.put(getTeamCount(team), team);
+		}
+		
+		Team selected = (Team) count.values().toArray()[0];
+		setTeam(player, selected);
+		
+		player.sendMessage(ChatColor.GRAY + "You were placed on the " + selected.getdisplay() + ChatColor.GRAY + " team!");
+		
 		if(players.size() >= Config.getMinPlayers()) {
 			countdown.begin();
 		}
@@ -136,6 +150,8 @@ public class Maps {
 	public void removePlayer(Player player) {
 		players.remove(player.getUniqueId());
 		player.teleport(Manager.getLobbySpawn());
+		
+		removeTeam(player);
 		
 		if (players.size() <= Config.getMinPlayers()) {
 			if(state.equals(GameState.COUNTDOWN)) {
@@ -184,5 +200,26 @@ public class Maps {
 	public void setTeamspawn1(Location loc) { this.teamSpawn1 = loc; }
 	public void setTeamspawn2(Location loc) { this.teamSpawn2 = loc; }
 	public void setLobby(Location loc) { this.waitLobby = loc; }
+	
+	public Team getTeam(Player player) { return teams.get(player.getUniqueId()); }
+	public void setTeam(Player player, Team team) {
+		removeTeam(player);
+		teams.put(player.getUniqueId(), team);
+	}
+	public void removeTeam(Player player) {
+		if(teams.containsKey(player.getUniqueId())) {
+			teams.remove(player.getUniqueId());
+		}
+	}
+	public int getTeamCount(Team team) {
+		int amount = 0;
+		for (Team t : teams.values()) {
+			if (t.equals(team)) {
+				amount++;
+			}
+		}
+		
+		return amount;
+	}
 	
 }
