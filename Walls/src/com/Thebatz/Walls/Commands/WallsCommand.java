@@ -185,15 +185,14 @@ public class WallsCommand implements CommandExecutor{
 				}
 			}
 			
-			else if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-				if(player.hasPermission("walls.admin")) {
-					Main.getInstance().getConfig().options().copyDefaults();
-					Main.getInstance().saveDefaultConfig();
-					player.sendMessage(ChatColor.GREEN + "Walls config reloaded!");
-				} else {
-					player.sendMessage(ChatColor.RED + "You don't have permission to use this");
-				}
-			}
+//			else if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+//				if(player.hasPermission("walls.admin")) {
+//					FileConfiguration file = Main.getInstance().getConfig();
+//					player.sendMessage(ChatColor.GREEN + "Walls config reloaded!");
+//				} else {
+//					player.sendMessage(ChatColor.RED + "You don't have permission to use this");
+//				}
+//			}
 			
 			// -------------------------------------[PLAYER COMMANDS]-----------------------------------------------
 			

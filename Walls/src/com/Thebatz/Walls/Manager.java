@@ -32,7 +32,7 @@ public class Manager {
 			lobby.setPitch(pitch);
 			lobby.setYaw(yaw);
 		} else {
-			System.out.println("[Walls] LobbySpawn file not found. Creating file...");
+			System.out.println("[Walls] Data file not found. Creating file...");
 		}
 		
 	}

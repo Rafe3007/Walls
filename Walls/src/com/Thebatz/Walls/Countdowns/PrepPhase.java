@@ -1,6 +1,7 @@
 package com.Thebatz.Walls.Countdowns;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.Thebatz.Walls.Config;
@@ -25,6 +26,7 @@ public class PrepPhase extends BukkitRunnable{
 	public void run() {
 		if(minutes == 0) {
 			cancel();
+			map.playSound(Sound.BLOCK_BEACON_POWER_SELECT, 10, (float) 1.5);
 			map.battle();
 			return;
 		}

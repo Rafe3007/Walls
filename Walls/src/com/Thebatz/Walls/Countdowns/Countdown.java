@@ -1,6 +1,7 @@
 package com.Thebatz.Walls.Countdowns;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.Thebatz.Walls.Config;
@@ -33,6 +34,7 @@ public class Countdown extends BukkitRunnable{
 		}
 		
 		if (seconds % 30 == 0 || seconds <= 10) {
+			map.playSound(Sound.BLOCK_STONE_BUTTON_CLICK_ON, 10, 1);
 			if(seconds == 1) {
 				map.sendMessage(ChatColor.AQUA + "Game will start in 1 second.");
 			} else {

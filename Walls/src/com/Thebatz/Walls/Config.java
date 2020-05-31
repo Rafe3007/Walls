@@ -29,4 +29,5 @@ public class Config {
 	public static List<String> getWallMaterials (int id) { return main.getConfig().getStringList("Maps." + id + ".wall"); }
 	
 	public static int getMapAmount() { return main.getConfig().getConfigurationSection("Maps.").getKeys(false).size(); }
+
 }

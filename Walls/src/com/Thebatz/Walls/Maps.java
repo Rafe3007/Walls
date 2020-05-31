@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -73,13 +74,13 @@ public class Maps {
 			);
 			teamSpawn2.setPitch(pitch2);
 			teamSpawn2.setYaw(yaw2);
-			
-			BlockVector3 max = createBv3(initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.x"),
-					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.y"),
-					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.z"));
-			BlockVector3 min = createBv3(initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.x"),
-					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.y"),
-					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.z"));
+		
+			BlockVector3 max = createBv3(initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.max.x"),
+					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.max.y"),
+					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.max.z"));
+			BlockVector3 min = createBv3(initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.min.x"),
+					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.min.y"),
+					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.min.z"));
 			World world = BukkitAdapter.adapt(Bukkit.getWorld(initiateFiles.getMapYaml().getString("Maps." + id + ".wall-region.world")));
 			wall = new CuboidRegion(world,max,min);
 		} else {
@@ -113,6 +114,7 @@ public class Maps {
 		state = GameState.RECRUITING;
 		players.clear();
 		countdown = new Countdown(this);
+		prepPhase = new PrepPhase(this);
 		game = new Game(this);
 	}
 	
@@ -146,6 +148,13 @@ public class Maps {
 		}
 	}
 	
+	public void playSound(Sound sound, float volume, float pitch) {
+		for (UUID uuid : players) {
+			Player player = Bukkit.getPlayer(uuid);
+			player.playSound(player.getLocation(), sound, volume, pitch);
+		}
+	}
+	
 	// returns new BlockVector3
 	public BlockVector3 createBv3(int x, int y, int z) {
 		return BlockVector3.at(x, y, z);
@@ -161,10 +170,13 @@ public class Maps {
 	public Location getMapLobby() { return waitLobby; }
 	public CuboidRegion getWallRegion() { return wall; }
 	public List<Block> getWall() { 
+		org.bukkit.World w = Config.getMapWorld(id);
+		
 		for (BlockVector3 block : wall) {
-			Location temp = BukkitAdapter.adapt(BukkitAdapter.adapt(wall.getWorld()), block);
-			wallMaterials.add(temp.getBlock());
+			Block b = w.getBlockAt(block.getBlockX(), block.getBlockY(), block.getBlockZ());
+			wallMaterials.add(b);
 		}
+	
 		return wallMaterials; 
 	}
 	

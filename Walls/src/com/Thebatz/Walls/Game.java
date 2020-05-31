@@ -32,17 +32,16 @@ public class Game {
 	
 	public void battle() {
 		map.sendMessage(ChatColor.GRAY + "The Walls have fallen... Last team standing wins");
-		
+		List<String> matsList = Config.getWallMaterials(map.getID());
 		List<Block> wall = map.getWall();
+//		map.sendMessage("Size: " + wall.size());
 		// For loop iterating wallMat String
-		for (Block block : wall) {
-			if(block.getType().equals(Material.DIRT)) {
-				block.setType(Material.ACACIA_PLANKS);
-				map.sendMessage("Found Dirt!!");
-			} else {
-				map.sendMessage("Didn't find jazz :/ Size: " + wall.size());
+		for(String material : matsList) {
+			for (Block block : wall) {
+				if(block.getType().equals(Material.getMaterial(material))) {
+					block.setType(Material.AIR);
+				}
 			}
-			
 		}
 		
 	}

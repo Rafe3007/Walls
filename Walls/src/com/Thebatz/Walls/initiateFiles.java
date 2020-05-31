@@ -74,8 +74,8 @@ public class initiateFiles {
 		editData.set("Maps." + id + ".wall-region.max.y", region.getMaximumPoint().getBlockY());
 		editData.set("Maps." + id + ".wall-region.max.z", region.getMaximumPoint().getBlockZ());
 		editData.set("Maps." + id + ".wall-region.min.x", region.getMinimumPoint().getBlockX());
-		editData.set("Maps." + id + ".wall-region.min.y", region.getMaximumPoint().getBlockY());
-		editData.set("Maps." + id + ".wall-region.min.z", region.getMaximumPoint().getBlockZ());
+		editData.set("Maps." + id + ".wall-region.min.y", region.getMinimumPoint().getBlockY());
+		editData.set("Maps." + id + ".wall-region.min.z", region.getMinimumPoint().getBlockZ());
 		try {
 			editData.save(data);
 		} catch (IOException e) {
