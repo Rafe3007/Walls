@@ -114,14 +114,14 @@ public class WallsCommand implements CommandExecutor{
 				}
 			}
 			
-			else if(args.length == 2 && args[0].equalsIgnoreCase("setspawnb")) {
+			else if(args.length == 2 && args[0].equalsIgnoreCase("setspawna")) {
 				if(player.hasPermission("walls.admin")) {
 					try {
 						int id = Integer.parseInt(args[1]);
 						if (id >= 0 && id <= (Config.getMapAmount() - 1)) {
 							Manager.getMap(id).setTeamspawn1(player.getLocation());
 							initiateFiles.writeTSA(player, id);
-							player.sendMessage(ChatColor.GREEN + "Map Spawn B Successfully set");
+							player.sendMessage(ChatColor.GREEN + "Map Spawn A Successfully set");
 						} else {
 							player.sendMessage(ChatColor.RED + "Invalid usage. - /walls stsa [id]");
 						}
@@ -133,14 +133,14 @@ public class WallsCommand implements CommandExecutor{
 				}
 			}
 			
-			else if(args.length == 2 && args[0].equalsIgnoreCase("setspawna")) {
+			else if(args.length == 2 && args[0].equalsIgnoreCase("setspawnb")) {
 				if(player.hasPermission("walls.admin")) {
 					try {
 						int id = Integer.parseInt(args[1]);
 						if (id >= 0 && id <= (Config.getMapAmount() - 1)) {
 							Manager.getMap(id).setTeamspawn2(player.getLocation());
 							initiateFiles.writeTSB(player, id);
-							player.sendMessage(ChatColor.GREEN + "Map Spawn A Successfully set");
+							player.sendMessage(ChatColor.GREEN + "Map Spawn B Successfully set");
 						} else {
 							player.sendMessage(ChatColor.RED + "Invalid usage. - /walls stsb [id]");
 						}
@@ -187,20 +187,23 @@ public class WallsCommand implements CommandExecutor{
 				}
 			}
 			
-//			else if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-//				if(player.hasPermission("walls.admin")) {
-//					FileConfiguration file = Main.getInstance().getConfig();
-//					player.sendMessage(ChatColor.GREEN + "Walls config reloaded!");
-//				} else {
-//					player.sendMessage(ChatColor.RED + "You don't have permission to use this");
-//				}
-//			}
+			else if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+				if(player.hasPermission("walls.admin")) {
+					Main.getInstance().reloadConfig();
+					player.sendMessage(ChatColor.GREEN + "Walls config reloaded!");
+				}
+			}
 			
 			// -------------------------------------[PLAYER COMMANDS]-----------------------------------------------
 			
 			else if(args.length == 1 && args[0].equalsIgnoreCase("lobby")) {
 				if(player.hasPermission("walls.player")) {
 					if(Manager.getLobbySpawn() != null) {
+						if(Manager.isPlaying(player)) {
+							Manager.getMap(player).removePlayer(player); 
+							player.sendMessage(ChatColor.GRAY + "You have left the game.");
+						}
+						
 						player.teleport(Manager.getLobbySpawn());
 					} else {
 						player.sendMessage(ChatColor.RED + "Error: Lobby spawn not set or not valid");
@@ -227,7 +230,7 @@ public class WallsCommand implements CommandExecutor{
 					if(Manager.isPlaying(player)) {
 						Manager.getMap(player).removePlayer(player); 
 						
-						player.sendMessage(ChatColor.GREEN + "You have left the game.");
+						player.sendMessage(ChatColor.GRAY + "You have left the game.");
 					} else {
 						player.sendMessage(ChatColor.RED + "You are not in an Walls game!");
 					}

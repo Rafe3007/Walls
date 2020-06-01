@@ -101,6 +101,7 @@ public class Maps {
 	}
 	
 	public void start() {
+		tpPlayers();
 		game.start();
 		prepPhase.begin();
 	}
@@ -168,6 +169,32 @@ public class Maps {
 		for (UUID uuid : players) {
 			Player player = Bukkit.getPlayer(uuid);
 			player.playSound(player.getLocation(), sound, volume, pitch);
+		}
+	}
+	
+	public boolean isOnTeam(Player player, Team team) {
+		if(players.contains(player.getUniqueId())) {
+			if(teams.containsKey(player.getUniqueId())) {
+				if(teams.get(player.getUniqueId()) == team) {
+					return true; 
+				}
+			}
+		} 
+		return false;
+	}
+	
+	public void tpPlayers() {
+		Player player;
+		for(UUID uuid : players) {
+			player = Bukkit.getPlayer(uuid);
+			if(isOnTeam(player, Team.BLUE)) {
+				player.teleport(teamSpawn1);
+			} else if(isOnTeam(player, Team.ORANGE)) {
+				player.teleport(teamSpawn2);
+			} else {
+				removePlayer(player);
+				player.sendMessage(ChatColor.RED + "Error: Don't know what went wrong");
+			}
 		}
 	}
 	

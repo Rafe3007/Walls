@@ -34,7 +34,6 @@ public class Game {
 		map.sendMessage(ChatColor.GRAY + "The Walls have fallen... Last team standing wins");
 		List<String> matsList = Config.getWallMaterials(map.getID());
 		List<Block> wall = map.getWall();
-//		map.sendMessage("Size: " + wall.size());
 		// For loop iterating wallMat String
 		for(String material : matsList) {
 			for (Block block : wall) {

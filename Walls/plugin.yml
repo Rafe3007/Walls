@@ -4,6 +4,7 @@ version: 1.0
 name: Walls
 author: Thebatz
 description: Walls mini-game
+depend: [WorldEdit]
 commands:
   test:
     aliases: [t]
