@@ -7,10 +7,14 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import com.Thebatz.Walls.Countdowns.Countdown;
 import com.Thebatz.Walls.Countdowns.PrepPhase;
@@ -151,6 +155,7 @@ public class Maps {
 	public void removePlayer(Player player) {
 		players.remove(player.getUniqueId());
 		player.teleport(Manager.getLobbySpawn());
+		spectatorOff(player);
 		
 		removeTeam(player);
 		
@@ -193,9 +198,32 @@ public class Maps {
 				player.teleport(teamSpawn2);
 			} else {
 				removePlayer(player);
-				player.sendMessage(ChatColor.RED + "Error: Don't know what went wrong");
+				player.sendMessage(ChatColor.RED + "Error: Honestly don't know what went wrong");
 			}
 		}
+	}
+	
+	public void spectatorOn(Player player) {
+		PotionEffect potion = new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false);
+		player.setGameMode(GameMode.ADVENTURE);
+		player.setAllowFlight(true);
+		player.setFlying(true);
+		player.setInvulnerable(true);
+		BukkitScheduler scheduler = Main.getInstance().getServer().getScheduler();
+        scheduler.scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                player.addPotionEffect(potion);
+            }
+        }, 20L);
+	}
+	
+	public void spectatorOff(Player player) {
+		player.setGameMode(GameMode.SURVIVAL);
+		player.setFlying(false);
+		player.setAllowFlight(false);
+		player.setInvulnerable(false);
+		player.removePotionEffect(PotionEffectType.INVISIBILITY);
 	}
 	
 	// returns new BlockVector3

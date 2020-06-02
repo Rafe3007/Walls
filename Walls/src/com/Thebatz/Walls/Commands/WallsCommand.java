@@ -244,12 +244,16 @@ public class WallsCommand implements CommandExecutor{
 					try {
 						int id = Integer.parseInt(args[1]);
 						if (id >= 0 && id <= (Config.getMapAmount() - 1)) {
-							if (Manager.isRecruiting(id)) {
-								Manager.getMap(id).addPlayer(player);
-								
-								player.sendMessage(ChatColor.GREEN + "You have joined the Walls map " + Manager.getMap(id).getName() + "!");
+							if(!Manager.getMap(id).getPlayers().contains(player.getUniqueId())) {
+								if (Manager.isRecruiting(id)) {
+									Manager.getMap(id).addPlayer(player);
+									
+	//								player.sendMessage(ChatColor.GREEN + "You have joined the Walls map " + Manager.getMap(id).getName() + "!");
+								} else {
+									player.sendMessage(ChatColor.RED + "Cannot join this game right now...");
+								}
 							} else {
-								player.sendMessage(ChatColor.RED + "Cannot join this game right now...");
+								player.sendMessage(ChatColor.RED + "You are already in this game!");
 							}
 						} else {
 							player.sendMessage(ChatColor.RED + "Invalid map! See '/walls list for valid maps");

@@ -34,7 +34,9 @@ public class Countdown extends BukkitRunnable{
 		}
 		
 		if (seconds % 30 == 0 || seconds <= 10) {
-			map.playSound(Sound.BLOCK_STONE_BUTTON_CLICK_ON, 10, 1);
+			if(seconds <= 5) {
+				map.playSound(Sound.BLOCK_STONE_BUTTON_CLICK_ON, 10, 1);
+			}
 			if(seconds == 1) {
 				map.sendMessage(ChatColor.AQUA + "Game will start in 1 second.");
 			} else {
