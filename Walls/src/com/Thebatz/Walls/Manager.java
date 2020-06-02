@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class Manager {
@@ -76,4 +77,23 @@ public class Manager {
 	
 	public static boolean isRecruiting(int id) { return getMap(id).getState() == GameState.RECRUITING; }
 	
+	public static boolean isMapWorld(World world) {
+		for (Maps map : maps) {
+			if(map.getMapLobby().getWorld().getName().contentEquals(world.getName())) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static Maps getMap(World world) {
+		for (Maps map : maps) {
+			if(map.getMapLobby().getWorld().getName().contentEquals(world.getName())) {
+				return map;
+			}
+		}
+		
+		return null;
+	}
 }

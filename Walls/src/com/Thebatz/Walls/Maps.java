@@ -38,6 +38,7 @@ public class Maps {
 	private PrepPhase prepPhase;
 	private Game game;
 	
+	private boolean canJoin;
 	private Location temp = new Location(Bukkit.getWorld("world"),0,0,0);
 	
 	// TODO Make checks to see if all config sections are set
@@ -47,19 +48,9 @@ public class Maps {
 		this.name = Config.getMapName(id);
 		players = new ArrayList<>();
 		teams = new HashMap<>();
+		waitLobby = initiateFiles.getMapLobby(id);
 		
 		if(initiateFiles.getMapYaml().contains("Maps." + id)) {
-			float pitch = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.pitch");
-			float yaw = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.yaw");
-			waitLobby = new Location(
-				Bukkit.getWorld(initiateFiles.getMapYaml().getString("Maps." + id + ".lobby.world")),
-				initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.x"),
-				initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.y"),
-				initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.z")
-			);
-			waitLobby.setPitch(pitch);
-			waitLobby.setYaw(yaw);
-			
 			float pit1 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-A.pitch");
 			float yaw1 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-A.yaw");
 			teamSpawn1 = new Location(
@@ -88,8 +79,8 @@ public class Maps {
 			BlockVector3 min = createBv3(initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.min.x"),
 					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.min.y"),
 					initiateFiles.getMapYaml().getInt("Maps." + id + ".wall-region.min.z"));
-			World world = BukkitAdapter.adapt(Bukkit.getWorld(initiateFiles.getMapYaml().getString("Maps." + id + ".wall-region.world")));
-			wall = new CuboidRegion(world,max,min);
+			World wallworld = BukkitAdapter.adapt(Bukkit.getWorld(initiateFiles.getMapYaml().getString("Maps." + id + ".wall-region.world")));
+			wall = new CuboidRegion(wallworld,max,min);
 		} else {
 			waitLobby = temp;
 			teamSpawn1 = temp;
@@ -102,6 +93,8 @@ public class Maps {
 		countdown= new Countdown(this);
 		prepPhase = new PrepPhase(this);
 		game = new Game(this);
+		
+		canJoin = true;
 	}
 	
 	public void start() {
@@ -125,6 +118,10 @@ public class Maps {
 		countdown = new Countdown(this);
 		prepPhase = new PrepPhase(this);
 		game = new Game(this);
+		
+		Bukkit.unloadWorld(waitLobby.getWorld().getName(), false);
+		canJoin = false;
+		waitLobby = initiateFiles.getMapLobby(id);
 	}
 	
 	public void sendMessage(String message) {
@@ -240,6 +237,7 @@ public class Maps {
 	public Location getTeamspawn2() { return teamSpawn2; }
 	public Location getMapLobby() { return waitLobby; }
 	public CuboidRegion getWallRegion() { return wall; }
+	public boolean canJoin() { return canJoin; }
 	public List<Block> getWall() { 
 		org.bukkit.World w = Config.getMapWorld(id);
 		
@@ -257,6 +255,7 @@ public class Maps {
 	public void setLobby(Location loc) { this.waitLobby = loc; }
 	
 	public Team getTeam(Player player) { return teams.get(player.getUniqueId()); }
+	public void setJoinState(boolean state) { this.canJoin = state; }
 	public void setTeam(Player player, Team team) {
 		removeTeam(player);
 		teams.put(player.getUniqueId(), team);

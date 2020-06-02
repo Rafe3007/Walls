@@ -8,8 +8,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 
 public class GameListener implements Listener {
+	
+	@EventHandler
+	public void onWorldLoad(WorldLoadEvent e) {
+		
+		if(Manager.isMapWorld(e.getWorld())) {
+			Manager.getMap(e.getWorld()).setJoinState(true);
+		}
+		
+	}
 	
 	@EventHandler
 	public void onInventoryclick(InventoryClickEvent e) {

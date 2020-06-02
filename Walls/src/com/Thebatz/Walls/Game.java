@@ -37,7 +37,7 @@ public class Game {
 		// For loop iterating wallMat String
 		for(String material : matsList) {
 			for (Block block : wall) {
-				if(block.getType().equals(Material.getMaterial(material))) {
+				if(block.getType().equals(Material.valueOf(material))) {
 					block.setType(Material.AIR);
 				}
 			}

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -81,5 +83,25 @@ public class initiateFiles {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Location getMapLobby(int id) {
+		// Load in world - Should do this in seperate function :/
+		org.bukkit.World world = Bukkit.createWorld(new WorldCreator(Main.getInstance().getConfig().getString("Maps." + id + ".world")));		
+		world.setAutoSave(false);
+		
+		Location waitLobby;
+		float pitch = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.pitch");
+		float yaw = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.yaw");
+		waitLobby = new Location(
+			Bukkit.getWorld(initiateFiles.getMapYaml().getString("Maps." + id + ".lobby.world")),
+			initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.x"),
+			initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.y"),
+			initiateFiles.getMapYaml().getDouble("Maps." + id + ".lobby.z")
+		);
+		waitLobby.setPitch(pitch);
+		waitLobby.setYaw(yaw);
+		
+		return waitLobby;
 	}
 }
