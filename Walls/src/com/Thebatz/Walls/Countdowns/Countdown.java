@@ -38,9 +38,9 @@ public class Countdown extends BukkitRunnable{
 				map.playSound(Sound.BLOCK_STONE_BUTTON_CLICK_ON, 10, 1);
 			}
 			if(seconds == 1) {
-				map.sendMessage(ChatColor.AQUA + "Game will start in 1 second.");
+				map.sendMessage(ChatColor.AQUA + "Game will start in " + ChatColor.RED + 1 + ChatColor.AQUA + " second.");
 			} else {
-				map.sendMessage(ChatColor.AQUA + "Game will start in " + seconds + " seconds.");
+				map.sendMessage(ChatColor.AQUA + "Game will start in " + ChatColor.RED + seconds + ChatColor.AQUA + " seconds.");
 			}
 		}
 		

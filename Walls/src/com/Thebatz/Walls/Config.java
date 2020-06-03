@@ -23,7 +23,7 @@ public class Config {
 	public static int getPrepTime() { return main.getConfig().getInt("Prep-phase"); }
 	public static int getBattleTime() { return main.getConfig().getInt("Battle-phase"); }
 	
-	public static World getLobbyWorld() { return Bukkit.getWorld(main.getConfig().getString("lobby-spawn.world")); }
+	public static World getLobbyWorld() { return Bukkit.getWorld(main.getConfig().getString("Lobby-spawn.world")); }
 	public static World getMapWorld(int id) { return Bukkit.getWorld(main.getConfig().getString("Maps." + id + ".world")); }
 	public static String getMapName(int id) { return main.getConfig().getString("Maps." + id + ".name"); }  
 	public static List<String> getWallMaterials (int id) { return main.getConfig().getStringList("Maps." + id + ".wall"); }

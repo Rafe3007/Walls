@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import com.Thebatz.Walls.Countdowns.BattlePhase;
 import com.Thebatz.Walls.Countdowns.Countdown;
 import com.Thebatz.Walls.Countdowns.PrepPhase;
 import com.google.common.collect.TreeMultimap;
@@ -35,6 +36,7 @@ public class Maps {
 	private CuboidRegion wall;
 	private GameState state;
 	private Countdown countdown;
+	private BattlePhase battlephase;
 	private PrepPhase prepPhase;
 	private Game game;
 	
@@ -91,6 +93,7 @@ public class Maps {
 			
 		state = GameState.RECRUITING;
 		countdown= new Countdown(this);
+		battlephase = new BattlePhase(this);
 		prepPhase = new PrepPhase(this);
 		game = new Game(this);
 		
@@ -105,10 +108,21 @@ public class Maps {
 	
 	public void battle() {
 		game.battle();
+		battlephase.begin();
+	}
+	
+	public void celebrate() {
+		if(Bukkit.getScheduler().isCurrentlyRunning(prepPhase.getTaskId())) {
+			Bukkit.getScheduler().cancelTask(prepPhase.getTaskId());
+		} else {
+			Bukkit.getScheduler().cancelTask(battlephase.getTaskId());
+		}
+		game.getCelebrate().begin();
 	}
 	
 	public void reset() {
 		for (UUID uuid : players) {
+			spectatorOff(Bukkit.getPlayer(uuid));
 			Bukkit.getPlayer(uuid).teleport(Manager.getLobbySpawn());
 		}
 		
@@ -117,6 +131,7 @@ public class Maps {
 		teams.clear();
 		countdown = new Countdown(this);
 		prepPhase = new PrepPhase(this);
+		battlephase = new BattlePhase(this);
 		game = new Game(this);
 		
 		Bukkit.unloadWorld(waitLobby.getWorld().getName(), false);
@@ -143,24 +158,34 @@ public class Maps {
 		setTeam(player, selected);
 		
 		player.sendMessage(ChatColor.GRAY + "You were placed on the " + selected.getdisplay() + ChatColor.GRAY + " team!");
-		
+	    pUtils(player);
+	    
 		if(players.size() >= Config.getMinPlayers()) {
 			countdown.begin();
 		}
 	}
 	
+	private void pUtils(Player player) {
+		player.getInventory().clear();
+		player.updateInventory();
+		player.setGameMode(GameMode.SURVIVAL);
+	    player.setHealth(20.0);
+	    player.setFoodLevel(20);
+	}
+
 	public void removePlayer(Player player) {
 		players.remove(player.getUniqueId());
+		pUtils(player);
 		player.teleport(Manager.getLobbySpawn());
 		spectatorOff(player);
 		
 		removeTeam(player);
 		
-		if (players.size() <= Config.getMinPlayers()) {
-			if(state.equals(GameState.COUNTDOWN)) {
-				reset();
-			}
-		}
+//		if (players.size() <= Config.getMinPlayers()) {
+//			if(state.equals(GameState.COUNTDOWN)) {
+//				reset();
+//			}
+//		}
 		
 		if(players.size() == 0 && state.equals(GameState.LIVE)) {
 			reset();
@@ -206,6 +231,7 @@ public class Maps {
 		player.setAllowFlight(true);
 		player.setFlying(true);
 		player.setInvulnerable(true);
+		player.setHealth(20.0);
 		BukkitScheduler scheduler = Main.getInstance().getServer().getScheduler();
         scheduler.scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
             @Override

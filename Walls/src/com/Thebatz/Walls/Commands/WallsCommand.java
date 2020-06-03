@@ -248,7 +248,7 @@ public class WallsCommand implements CommandExecutor{
 								if(!Manager.getMap(id).getPlayers().contains(player.getUniqueId())) {
 									if (Manager.isRecruiting(id)) {
 										Manager.getMap(id).addPlayer(player);
-										player.sendMessage(ChatColor.GREEN + "You have joined the Walls map " + Manager.getMap(id).getName() + "!");
+//										player.sendMessage(ChatColor.GREEN + "You have joined the Walls map " + Manager.getMap(id).getName() + "!");
 									} else {
 										player.sendMessage(ChatColor.RED + "Cannot join this game right now...");
 									}

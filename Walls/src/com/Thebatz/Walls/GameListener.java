@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -41,19 +42,27 @@ public class GameListener implements Listener {
 		}
 	}
 	
-	// TODO Change chat to team colors
-//	@EventHandler
-//	public void onKill(PlayerDeathEvent e) {
-//		Player player = e.getEntity();
-//		if(player.getKiller() instanceof Player) {
-//			if(Manager.isPlaying(player) && Manager.getMap(player).getState().equals(GameState.LIVE)) {
-//				String killer = player.getKiller().getName();
-//				String killed = player.getName();
-//				Manager.getMap(player).sendMessage(ChatColor.RED + killed + " Was kill by " + killer);
-//				Manager.getMap(player).getGame().addKill(player);
-//			}
-//		}
-//	}
+	@EventHandler
+	public void onKill(PlayerDeathEvent e) {
+		Player player = (Player) e.getEntity();
+		if(player.getKiller() instanceof Player) {
+			Player killer = (Player) e.getEntity().getKiller();
+			if(Manager.isPlaying(player) && Manager.getMap(player).getState().equals(GameState.LIVE)) {
+				String killerr = Manager.getMap(killer).getTeam(killer).getColor() + player.getKiller().getName();
+				String killed = Manager.getMap(player).getTeam(player).getColor() + player.getName();
+				Manager.getMap(player).sendMessage(killed + ChatColor.RED + " Was killed by " + killerr);
+				player.spigot().respawn();
+				Manager.getMap(player).getGame().addKill(player);
+			}
+		} else if(Manager.isPlaying(player) && Manager.getMap(player).getState().equals(GameState.LIVE)) {
+			if(Manager.getMap(player).isOnTeam(player, Team.BLUE)) {
+				Manager.getMap(player).getGame().subBlueAmt();
+			} else if(Manager.getMap(player).isOnTeam(player, Team.ORANGE)) {
+				Manager.getMap(player).getGame().subOrangeAmt();
+			}
+			player.spigot().respawn();
+		}
+	}
 	
 	@EventHandler
 	public void onRespawn(PlayerRespawnEvent e) {

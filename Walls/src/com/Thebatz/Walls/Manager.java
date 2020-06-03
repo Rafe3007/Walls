@@ -3,7 +3,6 @@ package com.Thebatz.Walls;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -25,7 +24,7 @@ public class Manager {
 			float yaw = (float) initiateFiles.getMapYaml().getDouble("Lobby.yaw");
 			
 			lobby = new Location(
-				Bukkit.getWorld(initiateFiles.getMapYaml().getString("Lobby.world")),
+				Config.getLobbyWorld(),
 				initiateFiles.getMapYaml().getDouble("Lobby.x"),
 				initiateFiles.getMapYaml().getDouble("Lobby.y"),
 				initiateFiles.getMapYaml().getDouble("Lobby.z")
