@@ -35,6 +35,7 @@ public class WallsCommand implements CommandExecutor{
 					player.sendMessage(ChatColor.DARK_AQUA + "/walls setlobby [id]" + ChatColor.AQUA + " Set a map's waiting lobby");
 					player.sendMessage(ChatColor.DARK_AQUA + "/walls setSpawnA [id]" + ChatColor.AQUA + " Set spawn location of team A 'set team spawn a");
 					player.sendMessage(ChatColor.DARK_AQUA + "/walls setSpawnB [id]" + ChatColor.AQUA + " Set spawn location of team B 'set team spawn b");
+					player.sendMessage(ChatColor.DARK_AQUA + "/walls setWall [id]" + ChatColor.AQUA + " Set the location of the wall");
 					player.sendMessage(ChatColor.DARK_AQUA + "/walls info [id]" + ChatColor.AQUA + " Information about a walls map");
 					player.sendMessage(ChatColor.DARK_AQUA + "/walls reload" + ChatColor.AQUA + " Reload config file");
 				} 
@@ -121,7 +122,7 @@ public class WallsCommand implements CommandExecutor{
 						if (id >= 0 && id <= (Config.getMapAmount() - 1)) {
 							Manager.getMap(id).setTeamspawn1(player.getLocation());
 							initiateFiles.writeTSA(player, id);
-							player.sendMessage(ChatColor.GREEN + "Map Spawn A Successfully set");
+							player.sendMessage(ChatColor.GREEN + "Map Spawn A successfully set");
 						} else {
 							player.sendMessage(ChatColor.RED + "Invalid usage. - /walls stsa [id]");
 						}

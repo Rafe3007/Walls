@@ -50,9 +50,9 @@ public class Maps {
 		this.name = Config.getMapName(id);
 		players = new ArrayList<>();
 		teams = new HashMap<>();
-		waitLobby = initiateFiles.getMapLobby(id);
 		
 		if(initiateFiles.getMapYaml().contains("Maps." + id)) {
+			waitLobby = initiateFiles.getMapLobby(id);
 			float pit1 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-A.pitch");
 			float yaw1 = (float) initiateFiles.getMapYaml().getDouble("Maps." + id + ".Team-Spawn-A.yaw");
 			teamSpawn1 = new Location(
@@ -102,21 +102,23 @@ public class Maps {
 	
 	public void start() {
 		tpPlayers();
+		ppPlayer();
 		game.start();
 		prepPhase.begin();
 	}
 	
 	public void battle() {
+		bpPlayer();
 		game.battle();
 		battlephase.begin();
 	}
 	
 	public void celebrate() {
-		if(Bukkit.getScheduler().isCurrentlyRunning(prepPhase.getTaskId())) {
-			Bukkit.getScheduler().cancelTask(prepPhase.getTaskId());
-		} else {
-			Bukkit.getScheduler().cancelTask(battlephase.getTaskId());
-		}
+//		if(Bukkit.getScheduler().isCurrentlyRunning(prepPhase.getTaskId())) {
+//			Bukkit.getScheduler().cancelTask(prepPhase.getTaskId());
+//		} else {
+//			Bukkit.getScheduler().cancelTask(battlephase.getTaskId());
+//		}
 		game.getCelebrate().begin();
 	}
 	
@@ -158,6 +160,7 @@ public class Maps {
 		setTeam(player, selected);
 		
 		player.sendMessage(ChatColor.GRAY + "You were placed on the " + selected.getdisplay() + ChatColor.GRAY + " team!");
+		player.sendMessage(ChatColor.GRAY + "Type '/walls leave' if you wish to return to lobby");
 	    pUtils(player);
 	    
 		if(players.size() >= Config.getMinPlayers()) {
@@ -247,6 +250,22 @@ public class Maps {
 		player.setAllowFlight(false);
 		player.setInvulnerable(false);
 		player.removePotionEffect(PotionEffectType.INVISIBILITY);
+	}
+	
+	public void ppPlayer() { 
+		Player player;
+		for(UUID uuid : players) {
+			player = Bukkit.getPlayer(uuid);			
+			player.setInvulnerable(true); 
+		}
+	}
+	
+	public void bpPlayer() { 
+		Player player;
+		for(UUID uuid : players) {
+			player = Bukkit.getPlayer(uuid);			
+			player.setInvulnerable(false); 
+		}
 	}
 	
 	// returns new BlockVector3

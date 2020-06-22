@@ -29,7 +29,7 @@ public class Game {
 	
 	public void start() {
 		map.setState(GameState.LIVE);
-		map.sendMessage(ChatColor.GRAY + "You have " + ChatColor.RED + Config.getPrepTime() + ChatColor.GRAY + " mintues to prepare to fight");
+		map.sendMessage(ChatColor.GRAY + "You have " + ChatColor.RED + Config.getPrepTime() + ChatColor.GRAY + " minutes to prepare to fight");
 		
 		for(UUID uuid : map.getPlayers()) {
 			kills.put(uuid, 0);
@@ -71,10 +71,10 @@ public class Game {
 		}
 		
 		if(blue <= 0) {
-			map.sendMessage(Team.BLUE.getdisplay() + ChatColor.AQUA + " Team Wins!");
+			map.sendMessage(Team.ORANGE.getdisplay() + ChatColor.AQUA + " Team Wins!");
 			map.celebrate();
 		} else if(orange <= 0) {
-			map.sendMessage(Team.ORANGE.getdisplay() + ChatColor.AQUA + " Team Wins!");
+			map.sendMessage(Team.BLUE.getdisplay() + ChatColor.AQUA + " Team Wins!");
 			map.celebrate();
 		} else {
 			map.sendMessage(ChatColor.RED + "" + blue + ChatColor.BLUE + " Remain on Blue team.");
