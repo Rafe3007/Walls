@@ -1,3 +1,7 @@
+// TODO
+// player counter pre-game
+// find way to save/load config after 2nd time of typing '/walls setspawn'
+
 package com.Thebatz.Walls;
 
 import java.io.IOException;
@@ -8,7 +12,6 @@ import org.bukkit.plugin.Plugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.Thebatz.Walls.Commands.TestCommand;
 import com.Thebatz.Walls.Commands.WallsCommand;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
@@ -36,7 +39,6 @@ public class Main extends JavaPlugin{
 		
 		new Manager();
 		
-		getCommand("test").setExecutor(new TestCommand());
 		getCommand("walls").setExecutor(new WallsCommand());
 		
 		Bukkit.getPluginManager().registerEvents(new GameListener(), this);

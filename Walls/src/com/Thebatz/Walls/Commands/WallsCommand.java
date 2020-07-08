@@ -42,8 +42,6 @@ public class WallsCommand implements CommandExecutor{
 				
 				if(player.hasPermission("walls.player")) {
 					player.sendMessage(ChatColor.DARK_AQUA + "/walls lobby" + ChatColor.AQUA + " Teleport to lobby spawn");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls list" + ChatColor.AQUA + " List available maps");
-					player.sendMessage(ChatColor.DARK_AQUA + "/walls join [id]" + ChatColor.AQUA + " Join a walls game");
 					player.sendMessage(ChatColor.DARK_AQUA + "/walls leave" + ChatColor.AQUA + " Leave a walls game");
 				}
 			}
@@ -124,10 +122,10 @@ public class WallsCommand implements CommandExecutor{
 							initiateFiles.writeTSA(player, id);
 							player.sendMessage(ChatColor.GREEN + "Map Spawn A successfully set");
 						} else {
-							player.sendMessage(ChatColor.RED + "Invalid usage. - /walls stsa [id]");
+							player.sendMessage(ChatColor.RED + "Invalid usage. - /walls setspawna [id]");
 						}
 					} catch(NumberFormatException x) {
-						player.sendMessage(ChatColor.RED + "Invalid usage. - /walls stsa [id]");
+						player.sendMessage(ChatColor.RED + "Invalid usage. - /walls setspawna [id]");
 					}
 				} else {
 					player.sendMessage(ChatColor.RED + "You don't have permission to use this");
@@ -143,19 +141,16 @@ public class WallsCommand implements CommandExecutor{
 							initiateFiles.writeTSB(player, id);
 							player.sendMessage(ChatColor.GREEN + "Map Spawn B Successfully set");
 						} else {
-							player.sendMessage(ChatColor.RED + "Invalid usage. - /walls stsb [id]");
+							player.sendMessage(ChatColor.RED + "Invalid usage. - /walls setspawnb [id]");
 						}
 					} catch(NumberFormatException x) {
-						player.sendMessage(ChatColor.RED + "Invalid usage. - /walls stsb [id]");
+						player.sendMessage(ChatColor.RED + "Invalid usage. - /walls setspawnb [id]");
 					}
 				} else {
 					player.sendMessage(ChatColor.RED + "You don't have permission to use this");
 				}
 			}
 			
-		
-			
-			// TODO Edit Message
 			else if(args.length == 2 && args[0].equalsIgnoreCase("info")) {
 				if(player.hasPermission("walls.admin")) {
 					try {

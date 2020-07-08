@@ -165,6 +165,8 @@ public class Maps {
 	    
 		if(players.size() >= Config.getMinPlayers()) {
 			countdown.begin();
+		} else {
+			sendMessage(ChatColor.AQUA + player.getName() + " Has join the game!" + ChatColor.RED + " (" + players.size() + "/" + Config.getMaxPlayers() + ")");
 		}
 	}
 	

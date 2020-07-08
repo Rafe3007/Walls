@@ -6,8 +6,5 @@ author: Thebatz
 description: Walls mini-game
 depend: [WorldEdit]
 commands:
-  test:
-    aliases: [t]
-    description: Check if Config works
   walls:
     description: Type '/walls help' for more info
